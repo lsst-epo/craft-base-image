@@ -1,0 +1,39 @@
+name: 'Build and push container image'
+
+on:
+  push:
+    branches:
+    - 'master'
+
+jobs:
+  build-and-push:
+    name: 'Build and push container image'
+    runs-on: ubuntu-latest
+
+    # Checkout the repository to the GitHub Actions runner
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # gcloud CLI setup
+    - name: Login to GCP
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.SA_DEV_KEY }}
+        project_id: ${{ secrets.SV_PROJ_NAME }}
+        export_default_credentials: true
+
+     # Configure Docker to use the gcloud command-line tool as a credential
+      # helper for authentication
+    - run: gcloud --quiet auth configure-docker
+    - run: gcloud config list
+
+    # Build the Docker image
+    - name: Build Docker image
+      run: |-
+        docker build . \
+          --tag "gcr.io/${{ secrets.SV_PROJ_NAME }}/craft-base-image:${{ github.sha }}"
+    # Push the Docker image to Google Container Registry
+    - name: Publish image to GCR
+      run: |-
+        docker push "gcr.io/${{ secrets.SV_PROJ_NAME }}/craft-base-image:${{ github.sha }}"        
