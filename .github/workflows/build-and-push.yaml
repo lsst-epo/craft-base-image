@@ -1,9 +1,9 @@
 name: 'Build and push container image'
 
-on:
-  push:
-    branches:
-    - 'master'
+# on:
+#   push:
+#     branches:
+#     - 'master'
 
 jobs:
   build-and-push:
@@ -26,7 +26,6 @@ jobs:
      # Configure Docker to use the gcloud command-line tool as a credential
       # helper for authentication
     - run: gcloud --quiet auth configure-docker
-    - run: gcloud config list
 
     # Build the Docker image
     - name: Build Docker image
