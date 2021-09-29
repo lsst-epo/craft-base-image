@@ -1,4 +1,4 @@
-FROM php:fpm
+FROM php:7-fpm
 
 # Install dependencies
 USER root 
@@ -24,9 +24,10 @@ COPY config/fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 # Configure supervisor
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+RUN rm /var/www/html/index.nginx-debian.html && chown -R www-data:www-data /var/www /run
+
 # Add the www-data user to the tty group so it can write to stdout and stderr
 RUN usermod -aG tty www-data
-RUN chown -R www-data:www-data /var/www /run
 
 USER www-data
 
