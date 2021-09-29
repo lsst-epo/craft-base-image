@@ -1,9 +1,9 @@
 name: 'Build and push container image'
 
-# on:
-#   push:
-#     branches:
-#     - 'master'
+on:
+  push:
+    branches:
+    - 'master'
 
 jobs:
   build-and-push:
