@@ -25,7 +25,5 @@ if [ -f composer.json ]; then
     done
 fi
 
-./craft migrate/all
-
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 exec "$@"
