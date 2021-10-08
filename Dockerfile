@@ -2,7 +2,7 @@ FROM php:7-fpm
 
 # Install dependencies
 USER root 
-RUN apt-get update && apt-get -qq install libpq-dev libmagickwand-dev libzip-dev libmemcached-dev jq libonig-dev nginx supervisor
+RUN apt-get update && apt-get -qq install libpq-dev libmagickwand-dev libzip-dev libmemcached-dev jq libonig-dev nginx nginx-extras supervisor
 RUN pecl install imagick memcached && \
     docker-php-ext-install -j "$(nproc)" opcache iconv bcmath mbstring pdo_pgsql gd zip intl \
     && docker-php-ext-enable imagick memcached
