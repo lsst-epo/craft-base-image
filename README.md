@@ -52,7 +52,7 @@ Craft is not configured to use memcached out of the box. The `config/app.php` fi
 If you need to mount an .env file as a volume into the container it will
 be necessary to update the `web/index.php` file to look for the file in the
 correct path. The below example shows the changes needed to access the file
-from a directoey bassed in the `SECRETS_DIR` environment variable (`/var/secrets/` by default)  .
+from a directory bassed in the `SECRETS_DIR` environment variable (`/var/secrets/` by default)  .
 
 ```php
 ...
