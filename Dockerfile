@@ -25,7 +25,7 @@ COPY config/fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Configure Xdebug
-COPY config/xdebug.ini /usr/local/etc/xdebug.ini
+COPY config/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
  
 RUN rm /var/www/html/index.nginx-debian.html && chown -R www-data:www-data /var/www /run
 
