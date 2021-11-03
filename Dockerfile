@@ -3,9 +3,9 @@ FROM php:7-fpm
 # Install dependencies
 USER root 
 RUN apt-get update && apt-get -qq install libpq-dev libmagickwand-dev libzip-dev libmemcached-dev jq libonig-dev nginx nginx-extras supervisor
-RUN pecl install imagick memcached && \
+RUN pecl install imagick memcached xdebug && \
     docker-php-ext-install -j "$(nproc)" opcache iconv bcmath mbstring pdo_pgsql gd zip intl \
-    && docker-php-ext-enable imagick memcached
+    && docker-php-ext-enable imagick memcached xdebug
 
 # Configure PHP
 RUN sed -ri -e 's/memory_limit = 128M/memory_limit = 256M/' $PHP_INI_DIR/php.ini-production  && \
