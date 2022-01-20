@@ -10,6 +10,7 @@ RUN pecl install imagick memcached xdebug && \
 # Configure PHP
 RUN sed -ri -e 's/memory_limit = 128M/memory_limit = 512M/' $PHP_INI_DIR/php.ini-production  && \
     sed -ri -e 's/max_execution_time = 30/max_execution_time = 60/' $PHP_INI_DIR/php.ini-production && \
+    echo "output_buffering=off" >> $PHP_INI_DIR/php.ini-production && \
     mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
 
 # Tell CraftCMS to stream logs to stdout/stderr. https://craftcms.com/docs/3.x/config/#craft-stream-log
