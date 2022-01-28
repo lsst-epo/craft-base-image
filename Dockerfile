@@ -1,41 +1,46 @@
-FROM php:7-fpm
 
-# Install dependencies
-USER root 
-RUN apt-get update && apt-get -qq install libpq-dev libmagickwand-dev libzip-dev libmemcached-dev jq libonig-dev nginx nginx-extras supervisor
+# Use the official PHP image.
+# https://hub.docker.com/_/php
+FROM php:7.4-apache
+
+# Configure PHP for Cloud Run.
+# Precompile PHP code with opcache.
+RUN docker-php-ext-install -j "$(nproc)" opcache
+RUN set -ex; \
+  { \
+    echo "; Cloud Run enforces memory & timeouts"; \
+    echo "memory_limit = -1"; \
+    echo "max_execution_time = 0"; \
+    echo "; File upload at Cloud Run network limit"; \
+    echo "upload_max_filesize = 32M"; \
+    echo "post_max_size = 32M"; \
+    echo "; Configure Opcache for Containers"; \
+    echo "opcache.enable = On"; \
+    echo "opcache.validate_timestamps = Off"; \
+    echo "; Configure Opcache Memory (Application-specific)"; \
+    echo "opcache.memory_consumption = 32"; \
+  } > "$PHP_INI_DIR/conf.d/cloud-run.ini"
+
+RUN apt-get update && apt-get -qq install libpq-dev libmagickwand-dev libzip-dev libmemcached-dev jq libonig-dev
 RUN pecl install imagick memcached xdebug && \
     docker-php-ext-install -j "$(nproc)" opcache iconv bcmath mbstring pdo_pgsql gd zip intl \
     && docker-php-ext-enable imagick memcached xdebug
 
-# Configure PHP
-RUN sed -ri -e 's/memory_limit = 128M/memory_limit = 512M/' $PHP_INI_DIR/php.ini-production  && \
-    sed -ri -e 's/max_execution_time = 30/max_execution_time = 60/' $PHP_INI_DIR/php.ini-production && \
-    echo "output_buffering=off" >> $PHP_INI_DIR/php.ini-production && \
-    mv $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+# Use the PORT environment variable in Apache configuration files.
+# https://cloud.google.com/run/docs/reference/container-contract#port
+RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && \
+    sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g' /etc/apache2/sites-available/000-default.conf && \
+    sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && \
+    a2enmod rewrite
 
-# Tell CraftCMS to stream logs to stdout/stderr. https://craftcms.com/docs/3.x/config/#craft-stream-log
-ENV CRAFT_STREAM_LOG true
-
-# Configure Nginx
-COPY config/nginx.conf /etc/nginx/nginx.conf
-
-# Configure PHP-FPM
-COPY config/fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
-
-# Configure supervisor
-COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Configure Xdebug
-COPY config/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
- 
-RUN rm /var/www/html/index.nginx-debian.html && chown -R www-data:www-data /var/www /run
-
-# Add the www-data user to the tty group so it can write to stdout and stderr
-RUN usermod -aG tty www-data
-
-USER www-data
+# Configure PHP for development.
+# Switch to the production php.ini for production operations.
+# RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# https://github.com/docker-library/docs/blob/master/php/README.md#configuration
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+CMD [ "apache2-foreground" ]

@@ -31,8 +31,8 @@ jobs:
     - name: Build Docker image
       run: |-
         docker build . \
-          --tag "gcr.io/${{ secrets.SV_PROJ_NAME }}/craft-base-image:${{ github.sha }}"
+          --tag "us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image:${{ github.sha }}"
     # Push the Docker image to Google Container Registry
     - name: Publish image to GCR
       run: |-
-        docker push "gcr.io/${{ secrets.SV_PROJ_NAME }}/craft-base-image:${{ github.sha }}"        
+        docker push "us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image:${{ github.sha }}"        
