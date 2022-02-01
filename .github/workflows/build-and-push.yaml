@@ -33,7 +33,7 @@ jobs:
         export_default_credentials: true
 
      # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
-    - run: gcloud --quiet auth configure-docker
+    - run: gcloud --quiet auth configure-docker us-central1-docker.pkg.dev
     
     - name: Docker meta
       id: meta # you'll use this in the next step
