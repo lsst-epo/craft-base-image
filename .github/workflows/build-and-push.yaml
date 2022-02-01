@@ -15,6 +15,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    # https://github.com/docker/setup-buildx-action
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1
+
     # gcloud CLI setup
     - name: Login to GCP
       uses: google-github-actions/setup-gcloud@master
@@ -23,16 +32,26 @@ jobs:
         project_id: ${{ secrets.SV_PROJ_NAME }}
         export_default_credentials: true
 
-     # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
+     # Configure Docker to use the gcloud command-line tool as a credential helper for authentication
     - run: gcloud --quiet auth configure-docker
-
-    # Build the Docker image
-    - name: Build Docker image
-      run: |-
-        docker build . \
-          --tag "us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image:${{ github.sha }}"
-    # Push the Docker image to Google Container Registry
-    - name: Publish image to GCR
-      run: |-
-        docker push "us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image:${{ github.sha }}"        
+    
+    - name: Docker meta
+      id: meta # you'll use this in the next step
+      uses: docker/metadata-action@v3
+      with:
+        images: |
+          us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image
+        tags: |
+          type=schedule
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha
+    
+    - name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64/v8
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}     
