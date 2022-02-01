@@ -1,4 +1,3 @@
-
 # Use the official PHP image.
 # https://hub.docker.com/_/php
 FROM php:7.4-apache
@@ -10,7 +9,7 @@ RUN set -ex; \
   { \
     echo "; Cloud Run enforces memory & timeouts"; \
     echo "memory_limit = -1"; \
-    echo "max_execution_time = 0"; \
+    # echo "max_execution_time = 0"; \
     echo "; File upload at Cloud Run network limit"; \
     echo "upload_max_filesize = 32M"; \
     echo "post_max_size = 32M"; \
@@ -30,9 +29,7 @@ RUN pecl install imagick memcached xdebug && \
 # https://cloud.google.com/run/docs/reference/container-contract#port
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && \
     sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g' /etc/apache2/sites-available/000-default.conf && \
-    sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf && \
-    sed -ri -e 's/^([ \t]*)(<\/VirtualHost>)/\1\tHeader set Access-Control-Allow-Origin "*"\n\1\2/g' /etc/apache2/sites-available/*.conf && \
-    a2enmod rewrite
+    a2enmod rewrite headers
 
 # Configure PHP for development.
 # Switch to the production php.ini for production operations.
@@ -40,6 +37,7 @@ RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/a
 # https://github.com/docker-library/docs/blob/master/php/README.md#configuration
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
