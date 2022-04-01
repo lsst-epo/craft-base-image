@@ -25,6 +25,9 @@ if [ -f composer.json ]; then
     done
 fi
 
+# Ensure any pending migrations are run
+./craft migrate/all
+
 # Ensure the project config is set correctly
 ./craft project-config/apply
 
