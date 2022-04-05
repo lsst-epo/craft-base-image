@@ -41,8 +41,11 @@ jobs:
       with:
         images: |
           us-central1-docker.pkg.dev/skyviewer/public-images/craft-base-image
+        flavor: |
+          latest=true
+          prefix=
+          suffix=
         tags: |
-          type=schedule
           type=ref,event=branch
           type=ref,event=pr
           type=sha
