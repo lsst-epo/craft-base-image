@@ -7,9 +7,8 @@ set -e
 # Run pending migrations
 ./craft migrate/all --no-backup
 
-# Commented out by erosas for debugging purposes
-# # Apply changes from project config
-# ./craft project-config/apply
+# Apply changes from project config (unless ENVIRONMENT=dev)
+[ "$ENVIRONMENT" != "dev" ] && ./craft project-config/apply
 
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 exec "$@"
