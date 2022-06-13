@@ -8,7 +8,8 @@ set -e
 ./craft migrate/all --no-backup
 
 # Apply changes from project config (unless ENVIRONMENT=dev)
-[ "$ENVIRONMENT" != "dev" ] && ./craft project-config/apply
+# --force will apply everything from the project config files
+[ "$ENVIRONMENT" != "dev" ] && ./craft project-config/apply --force 
 
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
 exec "$@"
