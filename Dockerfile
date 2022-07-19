@@ -29,7 +29,9 @@ RUN pecl install imagick memcached xdebug && \
 # https://cloud.google.com/run/docs/reference/container-contract#port
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && \
     sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www\/html\/web/g' /etc/apache2/sites-available/000-default.conf && \
-    a2enmod rewrite headers
+    a2enmod rewrite headers && \
+    # The next line disables gzip compression. Added on 7/19/22 by Jared Trouth for troubleshooting.
+    a2dismod deflate
 
 COPY php.ini-production "$PHP_INI_DIR/php.ini"
 
