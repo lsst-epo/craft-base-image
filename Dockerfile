@@ -32,7 +32,7 @@ RUN pecl install \
   imagick \
   memcached \
   xdebug \
-  && docker-php-ext-install -j "$(nproc)" opcache iconv bcmath mbstring pdo_pgsql gd zip intl \
+  && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
   && docker-php-ext-enable imagick memcached xdebug
 
 # Use the PORT environment variable in Apache configuration files.
