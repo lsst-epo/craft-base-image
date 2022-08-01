@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - 'master'
+    - 'nginx'
 
 jobs:
   build-and-push:
