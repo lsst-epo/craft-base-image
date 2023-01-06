@@ -32,6 +32,7 @@ RUN pecl install \
   imagick \
   memcached \
   xdebug \
+  zlib \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
   && docker-php-ext-enable imagick memcached xdebug
 
