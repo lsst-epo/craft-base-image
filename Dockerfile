@@ -5,6 +5,7 @@ FROM php:8.1-apache
 # Configure PHP for Cloud Run.
 # Precompile PHP code with opcache.
 RUN docker-php-ext-install -j "$(nproc)" opcache
+RUN docker-php-ext-install -j "$(nproc)" memcache
 RUN set -ex; \
   { \
     # echo "; Cloud Run enforces memory & timeouts"; \
@@ -22,7 +23,7 @@ RUN set -ex; \
 
 RUN uname -srm
 
-RUN php -i
+RUN php -m
 
 RUN apt-get update && apt-get -qq install \
   libpq-dev \
@@ -41,6 +42,8 @@ RUN pecl install \
   zlib \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
   && docker-php-ext-enable imagick memcached xdebug
+
+RUN php -m
 
 # Use the PORT environment variable in Apache configuration files.
 # https://cloud.google.com/run/docs/reference/container-contract#port
