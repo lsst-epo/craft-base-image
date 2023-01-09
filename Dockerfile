@@ -20,13 +20,16 @@ RUN set -ex; \
     echo "opcache.memory_consumption = 128"; \
   } > "$PHP_INI_DIR/conf.d/app-engine.ini"
 
+RUN uname -srm
+
+RUN php -i
+
 RUN apt-get update && apt-get -qq install \
   libpq-dev \
   libmagickwand-dev \
   libzip-dev \
   libmemcached-dev \
   memcached \
-  memcache \
   jq \
   libonig-dev \
   && rm -rf /var/lib/apt/lists/*
