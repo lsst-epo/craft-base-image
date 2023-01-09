@@ -26,12 +26,14 @@ RUN apt-get update && apt-get -qq install \
   libzip-dev \
   libmemcached-dev \
   memcached \
+  php-memcache \
   jq \
   libonig-dev \
   && rm -rf /var/lib/apt/lists/*
 RUN pecl install \
   imagick \
   memcached \
+  php-memcache \
   xdebug \
   zlib \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
