@@ -25,6 +25,7 @@ RUN apt-get update && apt-get -qq install \
   libmagickwand-dev \
   libzip-dev \
   libmemcached-dev \
+  memcached \
   jq \
   libonig-dev \
   && rm -rf /var/lib/apt/lists/*
