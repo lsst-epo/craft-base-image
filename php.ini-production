@@ -52,6 +52,9 @@
 ; ~  bitwise NOT
 ; !  boolean NOT
 
+; Added by erosas
+extension=memcache.so 
+
 ; Boolean flags can be turned on using the values 1, On, True or Yes.
 ; They can be turned off using the values 0, Off, False or No.
 
