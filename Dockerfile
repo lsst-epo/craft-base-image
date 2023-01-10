@@ -19,11 +19,14 @@ RUN set -ex; \
     echo "opcache.validate_timestamps = Off"; \
     echo "; Configure Opcache Memory (Application-specific)"; \
     echo "opcache.memory_consumption = 128"; \
+    echo "extension=memcache.so " \
   } > "$PHP_INI_DIR/conf.d/app-engine.ini"
 
 RUN uname -srm
 
 RUN php -m
+
+RUN cat /etc/php5/apache2/php.ini
 
 RUN apt-get -y update
 
