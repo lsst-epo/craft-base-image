@@ -25,7 +25,7 @@ RUN uname -srm
 
 RUN php -m
 
-RUN apt-get update && apt-get install -y apt-transport-https
+RUN apt-get -y update
 
 RUN apt-get update && apt-get -qq install \
   libpq-dev \
