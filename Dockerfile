@@ -33,7 +33,6 @@ RUN apt-get update && apt-get -qq install \
   libzip-dev \
   libmemcached-dev \
   memcached \
-  php-memcache \
   jq \
   libonig-dev \
   && rm -rf /var/lib/apt/lists/*
