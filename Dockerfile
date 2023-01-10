@@ -25,6 +25,8 @@ RUN uname -srm
 
 RUN php -m
 
+RUN apt-get update && apt-get install -y apt-transport-https
+
 RUN apt-get update && apt-get -qq install \
   libpq-dev \
   libmagickwand-dev \
@@ -35,6 +37,7 @@ RUN apt-get update && apt-get -qq install \
   jq \
   libonig-dev \
   && rm -rf /var/lib/apt/lists/*
+
 RUN pecl install \
   imagick \
   memcached \
