@@ -3,7 +3,7 @@ name: 'Build and push container image'
 on:
   push:
     branches:
-    - 'php-8'
+    - 'master'
 
 jobs:
   build-and-push:
