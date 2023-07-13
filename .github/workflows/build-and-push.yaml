@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - 'master'
+    - 'k8s'
 
 jobs:
   build-and-push:
