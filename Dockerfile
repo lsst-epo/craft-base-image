@@ -23,8 +23,6 @@ RUN set -ex; \
 
 RUN uname -srm
 
-
-
 RUN apt-get -y update
 
 RUN apt-get update && apt-get -qq install \
@@ -35,7 +33,12 @@ RUN apt-get update && apt-get -qq install \
   memcached \
   jq \
   libonig-dev \
+  python3.10 \
+  pip \
   && rm -rf /var/lib/apt/lists/*
+
+RUN pip install supervisor
+COPY supervisord.conf /etc/supervisor/conf/supervisord.conf
 
 RUN pecl install \
   imagick \
