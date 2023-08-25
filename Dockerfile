@@ -37,8 +37,8 @@ RUN apt-get update && apt-get -qq install \
   pip \
   && rm -rf /var/lib/apt/lists/*
 
-RUN pip install supervisor
-COPY supervisord.conf /etc/supervisor/conf/supervisord.conf
+RUN pip install supervisor --break-system-packages
+COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
