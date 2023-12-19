@@ -30,7 +30,12 @@ RUN apt-get update && apt-get -qq install \
   # memcached \
   jq \
   libonig-dev \
+  python3.10 \
+  pip \
   && rm -rf /var/lib/apt/lists/*
+
+RUN pip install supervisor --break-system-packages
+COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
