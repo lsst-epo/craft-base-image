@@ -30,7 +30,7 @@ RUN apt-get update && apt-get -qq install \
   libonig-dev \
   python3.10 \
   pip \
-  redis-tools \
+  php-redis \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install supervisor --break-system-packages
