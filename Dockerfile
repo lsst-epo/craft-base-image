@@ -6,20 +6,18 @@ FROM php:8.2-apache
 # Precompile PHP code with opcache.
 RUN docker-php-ext-install -j "$(nproc)" opcache
 # RUN docker-php-ext-install -j "$(nproc)" memcache
-# RUN set -ex; \
-#   { \
-#     # echo "; Cloud Run enforces memory & timeouts"; \
-#     echo "memory_limit = 256M"; \
-#     echo "max_execution_time = 300"; \
-#     # echo "; File upload at Cloud Run network limit"; \
-#     echo "upload_max_filesize = 32M"; \
-#     echo "post_max_size = 32M"; \
-#     echo "; Configure Opcache for Containers"; \
-#     echo "opcache.enable = On"; \
-#     echo "opcache.validate_timestamps = Off"; \
-#     echo "; Configure Opcache Memory (Application-specific)"; \
-#     echo "opcache.memory_consumption = 128"; \
-#   } > "$PHP_INI_DIR/conf.d/app-engine.ini"
+RUN set -ex; \
+  { \
+    echo "memory_limit = 256M"; \
+    echo "max_execution_time = 300"; \
+    echo "upload_max_filesize = 32M"; \
+    echo "post_max_size = 32M"; \
+    echo "; Configure Opcache for Containers"; \
+    echo "opcache.enable = On"; \
+    echo "opcache.validate_timestamps = Off"; \
+    echo "; Configure Opcache Memory (Application-specific)"; \
+    echo "opcache.memory_consumption = 128"; \
+  } > "$PHP_INI_DIR/conf.d/app-engine.ini"
 
 
 RUN apt-get update && apt-get -qq install \
@@ -32,6 +30,7 @@ RUN apt-get update && apt-get -qq install \
   libonig-dev \
   python3.10 \
   pip \
+  redis-tools \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install supervisor --break-system-packages
@@ -44,7 +43,7 @@ RUN pecl install \
   redis \
   xdebug \
   zlib
-RUN docker-php-ext-install -j "$(nproc)" iconv bz2 opcache bcmath mbstring pdo_pgsql gd zip intl
+RUN docker-php-ext-install -j "$(nproc)" iconv bz2 bcmath mbstring pdo_pgsql gd zip intl
 RUN docker-php-ext-enable imagick redis xdebug
 
 RUN php -m
