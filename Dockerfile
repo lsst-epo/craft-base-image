@@ -8,10 +8,10 @@ RUN docker-php-ext-install -j "$(nproc)" opcache
 # RUN docker-php-ext-install -j "$(nproc)" memcache
 RUN set -ex; \
   { \
-    echo "memory_limit = 256M"; \
-    echo "max_execution_time = 300"; \
-    echo "upload_max_filesize = 32M"; \
-    echo "post_max_size = 32M"; \
+    # echo "memory_limit = 256M"; \
+    # echo "max_execution_time = 300"; \
+    # echo "upload_max_filesize = 32M"; \
+    # echo "post_max_size = 32M"; \
     echo "; Configure Opcache for Containers"; \
     echo "opcache.enable = On"; \
     echo "opcache.validate_timestamps = Off"; \
