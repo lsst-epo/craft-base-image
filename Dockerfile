@@ -24,13 +24,12 @@ RUN apt-get update && apt-get -qq install \
   libpq-dev \
   libmagickwand-dev \
   libzip-dev \
-  # libmemcached-dev \
+  libmemcached-dev \
   # memcached \
   jq \
   libonig-dev \
   python3.10 \
   pip \
-  redis-tools \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install supervisor --break-system-packages
@@ -38,13 +37,13 @@ COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
-  # memcached \
+  memcached \
   # memcache \
   redis \
   xdebug \
   zlib
 RUN docker-php-ext-install -j "$(nproc)" iconv bz2 bcmath mbstring pdo_pgsql gd zip intl
-RUN docker-php-ext-enable imagick redis xdebug
+RUN docker-php-ext-enable imagick memcached redis xdebug
 
 RUN php -m
 
