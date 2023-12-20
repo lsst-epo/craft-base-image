@@ -25,7 +25,7 @@ RUN apt-get update && apt-get -qq install \
   libmagickwand-dev \
   libzip-dev \
   libmemcached-dev \
-  # memcached \
+  memcached \
   jq \
   libonig-dev \
   python3.10 \
@@ -38,7 +38,7 @@ COPY supervisord.conf /etc/supervisord.conf
 RUN pecl install \
   imagick \
   memcached \
-  # memcache \
+  memcache \
   redis \
   xdebug \
   zlib
