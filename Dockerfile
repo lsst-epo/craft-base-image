@@ -2,10 +2,9 @@
 # https://hub.docker.com/_/php
 FROM php:8.2-apache
 
-# Configure PHP for Cloud Run.
+# Configure PHP for GKE.
 # Precompile PHP code with opcache.
 RUN docker-php-ext-install -j "$(nproc)" opcache
-# RUN docker-php-ext-install -j "$(nproc)" memcache
 RUN set -ex; \
   { \
     # echo "memory_limit = 256M"; \
@@ -14,9 +13,11 @@ RUN set -ex; \
     # echo "post_max_size = 32M"; \
     echo "; Configure Opcache for Containers"; \
     echo "opcache.enable = On"; \
-    echo "opcache.validate_timestamps = Off"; \
+    echo "opcache.enable_cli = On"; \
+    echo "opcache.validate_timestamps = On"; \
+    echo "opcache.revalidate_freq = 60"; \
     echo "; Configure Opcache Memory (Application-specific)"; \
-    echo "opcache.memory_consumption = 128"; \
+    echo "opcache.memory_consumption = 256"; \
   } > "$PHP_INI_DIR/conf.d/app-engine.ini"
 
 
