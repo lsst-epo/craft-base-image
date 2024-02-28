@@ -60,5 +60,5 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker-entrypoint.sh /
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
-
+ 
 CMD [ "apache2-foreground" ]
