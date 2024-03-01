@@ -8,7 +8,7 @@ set -e
 ./craft migrate/all --no-backup --no-content --interactive=0
 
 # Apply changes from project config yaml files
-./craft project-config/apply --force
+# ./craft project-config/apply --force
 
 # Run pending content migrations
 ./craft migrate --track=content --interactive=0
