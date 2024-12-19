@@ -132,6 +132,9 @@
 ;   Development Value: Off
 ;   Production Value: Off
 
+; Off to prevent Craft CMS security exploit
+register_argc_argv = Off 
+
 ; request_order
 ;   Default Value: None
 ;   Development Value: "GP"
