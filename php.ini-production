@@ -965,6 +965,9 @@ default_socket_timeout = 120
 ; Module Settings ;
 ;;;;;;;;;;;;;;;;;;;
 
+[Otel instrumentation]
+; extension=otel_instrumentation.so
+
 [CLI Server]
 ; Whether the CLI web server uses ANSI color coding in its terminal output.
 cli_server.color = On
