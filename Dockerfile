@@ -26,9 +26,6 @@ RUN pecl install \
   zlib \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
   && docker-php-ext-enable imagick redis
-  
-RUN docker-php-ext-install -j "$(nproc)" iconv bz2 bcmath mbstring pdo_pgsql gd zip intl
-RUN docker-php-ext-enable imagick memcached redis xdebug
 
 RUN php -m
 
