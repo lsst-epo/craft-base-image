@@ -5,21 +5,6 @@ FROM php:8.2-apache
 # Configure PHP for GKE.
 # Precompile PHP code with opcache.
 RUN docker-php-ext-install -j "$(nproc)" opcache
-RUN set -ex; \
-  { \
-    # echo "memory_limit = 256M"; \
-    # echo "max_execution_time = 300"; \
-    # echo "upload_max_filesize = 32M"; \
-    # echo "post_max_size = 32M"; \
-    echo "; Configure Opcache for Containers"; \
-    echo "opcache.enable = On"; \
-    echo "opcache.enable_cli = On"; \
-    echo "opcache.validate_timestamps = On"; \
-    echo "opcache.revalidate_freq = 60"; \
-    echo "; Configure Opcache Memory (Application-specific)"; \
-    echo "opcache.memory_consumption = 256"; \
-  } > "$PHP_INI_DIR/conf.d/app-engine.ini"
-
 
 RUN apt-get update && apt-get -qq install \
   libpq-dev \
@@ -29,8 +14,8 @@ RUN apt-get update && apt-get -qq install \
   memcached \
   jq \
   libonig-dev \
-  python3.10 \
-  pip \
+  python3 \
+  python3-pip \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install supervisor --break-system-packages
@@ -38,11 +23,10 @@ COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
-  memcached \
-  memcache \
-  redis \
-  xdebug \
-  zlib
+  zlib \
+  && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
+  && docker-php-ext-enable imagick redis
+  
 RUN docker-php-ext-install -j "$(nproc)" iconv bz2 bcmath mbstring pdo_pgsql gd zip intl
 RUN docker-php-ext-enable imagick memcached redis xdebug
 
