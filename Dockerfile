@@ -1,6 +1,6 @@
 # Use the official PHP image.
 # https://hub.docker.com/_/php
-FROM php:8.2-apache
+FROM php:8.2.35-apache
 
 # Configure PHP for GKE.
 # Precompile PHP code with opcache.
