@@ -23,7 +23,7 @@ COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
-  zlib \
+  redis \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
   && docker-php-ext-enable imagick redis
 
