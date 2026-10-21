@@ -33,7 +33,7 @@ RUN apt-get update && apt-get -qq install \
   memcached \
   jq \
   libonig-dev \
-  python3.10 \
+  python3.12 \
   pip \
   && rm -rf /var/lib/apt/lists/*
 
@@ -42,12 +42,9 @@ COPY supervisord.conf /etc/supervisord.conf
 
 RUN pecl install \
   imagick \
-  memcached \
-  memcache \
-  xdebug \
   zlib \
   && docker-php-ext-install -j "$(nproc)" iconv bcmath mbstring pdo_pgsql gd zip intl \
-  && docker-php-ext-enable imagick memcached memcache xdebug
+  && docker-php-ext-enable imagick
 
 RUN php -m
 
