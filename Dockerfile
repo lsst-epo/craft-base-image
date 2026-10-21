@@ -33,8 +33,8 @@ RUN apt-get update && apt-get -qq install \
   memcached \
   jq \
   libonig-dev \
-  python3.12 \
-  pip \
+  python3 \
+  python3-pip \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install supervisor --break-system-packages
