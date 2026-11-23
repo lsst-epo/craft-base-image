@@ -1,6 +1,6 @@
 # Use the official PHP image.
 # https://hub.docker.com/_/php
-FROM php:8.2.35-apache
+FROM php:8.2.36-apache
 
 # Precompile PHP code with opcache.
 RUN docker-php-ext-install -j "$(nproc)" opcache
